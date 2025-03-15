@@ -1,0 +1,176 @@
+<%- include('../partials/dashboard') %>
+
+    <div
+        class="flex-1 mb-10 bg-white shadow-lg rounded-lg px-2 py-4 md:px-6 md:py-6 border border-gray-200 w-full lg:max-w-full">
+        <h1 class="text-3xl font-semibold mb-6 text-gray-700 p-4 md:p-0">Old Product Price History</h1>
+
+        <!-- Filters Section -->
+        <div
+            class="bg-gray-100 p-4 rounded-lg shadow-sm flex flex-col sm:flex-row items-start lg:items-center gap-4 mb-6">
+            <select id="filterCity"
+                class="border border-gray-300 px-3 py-2 rounded-md w-full sm:w-auto focus:ring-2 focus:ring-blue-400">
+                <option value="" selected disabled>🌍 All Cities</option>
+                <% cities.forEach(city=> { %>
+                    <option value="<%= city.cityEnglish %>">
+                        <%= city.cityEnglish %>/ <%= city.cityUrdu %>
+                    </option>
+                    <% }); %>
+            </select>
+
+            <select id="filterCategory"
+                class="border border-gray-300 px-3 py-2 rounded-md w-full sm:w-auto focus:ring-2 focus:ring-blue-400">
+                <option value="" selected disabled>📂 All Categories</option>
+                <% categories.forEach(category=> { %>
+                    <option value="<%= category.categoryEnglish %>">
+                        <%= category.categoryEnglish %>/ <%= category.categoryUrdu %>
+                    </option>
+                    <% }); %>
+            </select>
+
+            <input type="date" id="filterDate"
+                class="border border-gray-300 px-3 py-2 rounded-md w-full sm:w-auto focus:ring-2 focus:ring-blue-400">
+
+            <button id="resetFilters"
+                class="bg-red-500 hover:bg-red-700 text-white px-10 py-2 lg:px-4 rounded-md transition-all duration-200">
+                🔄 Reset
+            </button>
+
+            <!-- Print Button -->
+            <button id="printTable"
+                class="bg-blue-500 hover:bg-blue-700 text-white px-10 py-2 lg:px-4 rounded-md transition-all duration-200">
+                🖨️ Print
+            </button>
+        </div>
+
+        <!-- Old Product History Table -->
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table id="historyTableWrapper" class="w-full border-collapse border border-gray-300 bg-white text-sm">
+                <!-- Table Header -->
+                <thead class="bg-gray-800 text-white text-left sticky top-0">
+                    <tr>
+                        <th class="border px-4 py-3">S.No</th>
+                        <th class="border px-4 py-3">📦 Product Name</th>
+                        <th class="border px-4 py-3">🏙️ City</th>
+                        <th class="border px-4 py-3">📁 Category</th>
+                        <th class="border px-4 py-3">💰 Old Price (Rs)</th>
+                        <th class="border px-4 py-3">📅 Updated Date</th>
+                    </tr>
+                </thead>
+                <!-- Table Body -->
+                <tbody id="historyTable">
+                    <% oldProducts.forEach((product, index)=> { %>
+                        <tr class="border-b hover:bg-gray-100 transition-all duration-200">
+                            <td class="border px-4 py-3 text-gray-700">
+                                <%= index + 1 %>
+                            </td>
+                            <td class="border px-4 py-3 text-gray-700">
+                                <strong>
+                                    <%= product.productEnglish %>
+                                </strong> / <span class="text-gray-500">
+                                    <%= product.productUrdu %>
+                                </span>
+                            </td>
+                            <td class="border px-4 py-3 text-gray-700">
+                                <%= product.cityEnglish %> / <span class="text-gray-500">
+                                        <%= product.cityUrdu %>
+                                    </span>
+                            </td>
+                            <td class="border px-4 py-3 text-gray-700">
+                                <%= product.categoryEnglish %> / <span class="text-gray-500">
+                                        <%= product.categoryUrdu %>
+                                    </span>
+                            </td>
+                            <td class="border px-4 py-3 text-green-600 font-semibold">Rs. <%= product.old_price %>/ kg
+                            </td>
+                            <td class="border px-4 py-3 text-gray-500">
+                                <%= product.old_updated_at %>
+                            </td>
+
+                        </tr>
+                        <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- JavaScript for Filtering & Printing -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const filterCity = document.getElementById("filterCity");
+            const filterCategory = document.getElementById("filterCategory");
+            const filterDate = document.getElementById("filterDate");
+            const resetFilters = document.getElementById("resetFilters");
+            const printTable = document.getElementById("printTable");
+            const historyTable = document.getElementById("historyTable");
+            const historyTableWrapper = document.getElementById("historyTableWrapper");
+
+            // Store original rows for filtering
+            const originalRows = [...historyTable.children];
+
+            function formatDate(dateString) {
+                if (!dateString) return "";
+                const dateObj = new Date(dateString);
+                if (isNaN(dateObj)) return ""; // Handle invalid dates
+                return dateObj.toISOString().split("T")[0]; // Convert to YYYY-MM-DD
+            }
+
+            function applyFilters() {
+                const selectedCity = filterCity.value.toLowerCase();
+                const selectedCategory = filterCategory.value.toLowerCase();
+                const selectedDate = filterDate.value; // YYYY-MM-DD
+
+                historyTable.innerHTML = "";
+
+                originalRows.forEach(row => {
+                    const city = row.children[2].textContent.toLowerCase();
+                    const category = row.children[3].textContent.toLowerCase();
+                    const date = formatDate(row.children[5].textContent.trim()); // Convert table date to YYYY-MM-DD
+
+                    const matchesCity = !selectedCity || city.includes(selectedCity);
+                    const matchesCategory = !selectedCategory || category.includes(selectedCategory);
+                    const matchesDate = !selectedDate || date === selectedDate;
+
+                    if (matchesCity && matchesCategory && matchesDate) {
+                        historyTable.appendChild(row);
+                    }
+                });
+            }
+
+            filterCity.addEventListener("change", applyFilters);
+            filterCategory.addEventListener("change", applyFilters);
+            filterDate.addEventListener("change", applyFilters);
+
+            resetFilters.addEventListener("click", () => {
+                filterCity.value = "";
+                filterCategory.value = "";
+                filterDate.value = "";
+                historyTable.innerHTML = "";
+                originalRows.forEach(row => historyTable.appendChild(row));
+            });
+
+            // Print Functionality
+            printTable.addEventListener("click", () => {
+                const printWindow = window.open("", "", "width=800,height=600");
+                printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print Product Price History</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; }
+                    table { width: 100%; border-collapse: collapse; }
+                    th, td { border: 1px solid black; padding: 8px; text-align: left; }
+                    th { background-color: #f4f4f4; }
+                </style>
+            </head>
+            <body>
+                <h2>Old Product Price History</h2>
+                ${historyTableWrapper.outerHTML}
+            </body>
+        </html>
+    `);
+                printWindow.document.close();
+                printWindow.print();
+            });
+        });
+
+    </script>

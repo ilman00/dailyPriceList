@@ -1,0 +1,55 @@
+<%- include('partials/dashboard') %>
+
+    <!-- Account Settings Section -->
+    <div class="flex-1 mb-10 bg-white shadow-lg p-8 rounded-lg border border-gray-200 max-w-full">
+        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+            <h1 class="text-2xl font-bold text-gray-900">Account Settings</h1>
+        </div>
+
+        <!-- Account Settings Form -->
+        <form class="mt-6 flex flex-col gap-6">
+            <!-- Profile Picture Upload -->
+            <div class="flex flex-col items-center">
+                <label for="profilePicture" class="text-gray-800 font-medium mb-2">Profile Picture</label>
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*" class="hidden">
+                <div class="w-24 h-24 rounded-full border border-gray-300 flex items-center justify-center overflow-hidden bg-gray-100 cursor-pointer"
+                    onclick="document.getElementById('profilePicture').click();">
+                    <span class="text-gray-500">Upload</span>
+                </div>
+            </div>
+
+            <!-- Full Name -->
+            <div>
+                <label for="fullName" class="block text-gray-800 font-medium mb-2">Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+            </div>
+
+            <!-- Email Address -->
+            <div>
+                <label for="email" class="block text-gray-800 font-medium mb-2">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email address"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+            </div>
+
+            <!-- Change Password -->
+            <div>
+                <label for="password" class="block text-gray-800 font-medium mb-2">New Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter new password"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+            </div>
+
+            <!-- Confirm Password -->
+            <div>
+                <label for="confirmPassword" class="block text-gray-800 font-medium mb-2">Confirm New Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm new password"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+            </div>
+
+            <!-- Save Changes Button -->
+            <button type="submit"
+                class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300">
+                Save Changes
+            </button>
+        </form>
+    </div>

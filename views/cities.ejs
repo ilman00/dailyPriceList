@@ -1,0 +1,100 @@
+<%- include('partials/dashboard') %>
+
+    <!-- Cities Section -->
+    <div class="flex-1 mb-10 bg-white shadow-md p-6 rounded-md border border-gray-300 w-full lg:max-w-full">
+        <div class="flex justify-between items-center border-b border-gray-300 pb-2">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Cities Management</h1>
+            <a href="/add-city"
+                class="add-city-btn bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition">Add
+                City</a>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mt-4">
+            <input type="text" id="searchCity" placeholder="Search city by name..."
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-gray-500 focus:outline-none">
+        </div>
+
+        <!-- Cities Table -->
+        <div class="overflow-x-auto mt-4">
+            <div class="max-h-[300px] sm:max-h-[600px] overflow-y-auto border border-gray-300 rounded-md">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead class="bg-gray-100">
+                        <tr class="text-xs sm:text-sm md:text-base">
+                            <th class="border border-gray-300 px-8 sm:px-12 py-2 text-left">S.No</th>
+                            <th class="border border-gray-300 px-8 sm:px-12 py-2 text-left">City</th>
+                            <th class="border border-gray-300 px-8 sm:px-12 py-2 text-left">City</th>
+                            <th class="border border-gray-300 px-8 sm:px-12 py-2 text-left">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="citiesTable">
+                        <% cities.forEach((city, index)=> { %>
+                            <tr>
+                                <td class="border border-gray-300 px-2 sm:px-4 py-2">
+                                    <%= index + 1 %>
+                                </td>
+                                <td class="border border-gray-300 px-2 sm:px-4 py-2">
+                                    <%= city.cityEnglish %>
+                                </td>
+                                <td class="border border-gray-300 px-2 sm:px-4 py-2">
+                                    <%= city.cityUrdu %>
+                                </td>
+                                <td class="border border-gray-300 px-2 sm:px-4 py-2">
+                                    <a href="/edit-city/<%= city.id %>"
+                                        class="edit-btn bg-blue-500 text-white text-xs sm:text-sm px-4 py-2 rounded-md hover:bg-blue-600 transition">Edit</a>
+
+                                    <button data-id="<%= city.id %>"
+                                        class="delete-btn bg-red-500 text-white text-xs sm:text-sm px-4 py-2 rounded-md hover:bg-red-600 transition">Delete</button>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+
+    <!-- Delete City -->
+    <script>
+        document.querySelectorAll(".delete-btn").forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                const cityId = this.getAttribute("data-id");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/delete-city/${cityId}`, { method: "DELETE" })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.message) {
+                                    Swal.fire("Deleted!", "City has been deleted.", "success").then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire("Error!", data.error || "Failed to delete city.", "error");
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                Swal.fire("Error!", "Something went wrong.", "error");
+                            });
+                    }
+                });
+            });
+        });
+    </script>

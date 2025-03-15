@@ -1,0 +1,73 @@
+<nav class="bg-white text-gray-900 py-10 shadow-[0_4px_10px_rgba(0,0,0,0.1)] border-b-2 border-gray-200/60">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-6 md:px-12 gap-6">
+        <!-- Left Section: Dashboard -->
+        <div>
+            <h1 class="text-3xl md:text-4xl font-bold tracking-wide">
+                <a href="/" class="hover:text-gray-600 transition">Dashboard</a>
+            </h1>
+        </div>
+
+        <!-- Right Section: Settings & Create Content -->
+        <div class="flex flex-col md:flex-row md:items-center w-full md:w-auto space-y-4 md:space-y-0 md:space-x-6">
+
+            <!-- Settings Dropdown -->
+            <div class="z-50 relative">
+                <button id="settings-btn"
+                    class="bg-white px-5 py-2.5 rounded-lg flex items-center gap-2 text-gray-800 shadow-md transition-all hover:bg-gray-200 focus:outline-none">
+                    ⚙️ Settings ▼
+                </button>
+                <ul id="settings-menu"
+                    class="hidden absolute top-12 left-0 md:right-0 bg-white text-gray-900 shadow-lg rounded-lg py-2 w-48 border border-gray-200 backdrop-blur-lg bg-opacity-90">
+                    <li class="px-4 py-3 hover:bg-gray-100 cursor-pointer rounded-lg transition"><a
+                            href="/account-setting">Account
+                            Setting</a></li>
+                </ul>
+            </div>
+
+            <!-- Create Content Dropdown -->
+            <div class="z-20 relative">
+                <button id="content-btn"
+                    class="bg-white px-5 py-2.5 rounded-lg flex items-center gap-2 text-gray-800 shadow-md transition-all hover:bg-gray-200 focus:outline-none">
+                    ➕ Create Content ▼
+                </button>
+                <ul id="content-menu"
+                    class="hidden absolute top-12 left-0 md:right-0 bg-white text-gray-900 shadow-lg rounded-lg py-2 w-48 border border-gray-200 backdrop-blur-lg bg-opacity-90">
+                    <li class="px-4 py-3 hover:bg-gray-100 cursor-pointer rounded-lg transition"><a href="/add-city">Add
+                            City</a></li>
+                    <li class="px-4 py-3 hover:bg-gray-100 cursor-pointer rounded-lg transition"><a
+                            href="/add-category">Add
+                            Category</a></li>
+                    <li class="px-4 py-3 hover:bg-gray-100 cursor-pointer rounded-lg transition"><a
+                            href="/add-product">Add
+                            Product</a></li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- JavaScript for Dropdown Toggle -->
+<script>
+    document.getElementById("settings-btn").addEventListener("click", function (event) {
+        event.stopPropagation();
+        document.getElementById("settings-menu").classList.toggle("hidden");
+        document.getElementById("content-menu").classList.add("hidden"); // Close other menu
+    });
+
+    document.getElementById("content-btn").addEventListener("click", function (event) {
+        event.stopPropagation();
+        document.getElementById("content-menu").classList.toggle("hidden");
+        document.getElementById("settings-menu").classList.add("hidden"); // Close other menu
+    });
+
+    // Close dropdowns when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!event.target.closest("#settings-btn, #settings-menu")) {
+            document.getElementById("settings-menu").classList.add("hidden");
+        }
+        if (!event.target.closest("#content-btn, #content-menu")) {
+            document.getElementById("content-menu").classList.add("hidden");
+        }
+    });
+</script>

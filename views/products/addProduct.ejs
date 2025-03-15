@@ -1,0 +1,66 @@
+<%- include('../partials/dashboard') %>
+
+    <!-- Add Product Section -->
+    <div class="flex-1 mb-10 bg-white shadow-lg p-8 rounded-lg border border-gray-200 max-w-full">
+        <div class="flex justify-between items-center border-b border-gray-200 pb-4">
+            <h1 class="text-2xl font-bold text-gray-900">Add Product</h1>
+        </div>
+
+        <!-- Add Product Form -->
+        <form class="mt-6 flex flex-col gap-6" action="/add-product" method="POST">
+            <!-- Select City -->
+            <div>
+                <label for="city" class="block text-gray-800 font-medium mb-2">Select City</label>
+                <select id="city" name="city"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+                    <option value="" disabled selected class="text-black">Choose a city</option>
+                    <% cities.forEach(city=> { %>
+                        <option value="<%= city.id %>" class="text-gray-800">
+                            <%= city.cityEnglish %>/ <%= city.cityUrdu%>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+
+            <!-- Select Category -->
+            <div>
+                <label for="category" class="block text-gray-800 font-medium mb-2">Select Category</label>
+                <select id="category" name="category"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+                    <option value="" disabled selected class="text-black">Choose a category</option>
+                    <% categories.forEach(category=> { %>
+                        <option value="<%= category.id %>" class="text-gray-800">
+                            <%= category.categoryEnglish %>/ <%= category.categoryUrdu%>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+
+            <!-- Product Name (English) -->
+            <div>
+                <label for="productEnglish" class="block text-gray-800 font-medium mb-2">Product Name (English)</label>
+                <input type="text" id="productEnglish" name="productEnglish" placeholder="Enter product name in English"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+            </div>
+
+            <!-- Product Name (Urdu) -->
+            <div>
+                <label for="productUrdu" class="block text-gray-800 font-medium mb-2">پروڈکٹ نام (اردو)</label>
+                <input type="text" id="productUrdu" name="productUrdu" placeholder="اردو میں پروڈکٹ کا نام درج کریں"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm text-right">
+            </div>
+
+            <!-- Product Price -->
+            <div>
+                <label for="price" class="block text-gray-800 font-medium mb-2">Price (PKR)</label>
+                <input type="number" id="price" name="price" placeholder="Enter product price"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none shadow-sm">
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit"
+                class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300">
+                Add Product
+            </button>
+        </form>
+    </div>
