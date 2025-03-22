@@ -43,6 +43,12 @@ app.use(passport.session());
 
 port = process.env.PORT;
 
+app.use((req, res, next) => {
+    console.log("checking user in the req object",req.user);
+    res.locals.user = req.user.email || null; // Assuming user data is stored in req.user after authentication
+    next();
+});
+
 
 app.use(foodRoutes);
 app.use(categoriesRoutes);

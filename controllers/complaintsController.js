@@ -75,9 +75,11 @@ const updateComplaintStatus = async (req, res) => {
 const getAllComplaints = async (req, res) => {
     try {
         const sql = 'SELECT * FROM complaints';
-        const complaints = await query(sql); // Await the query
+        const complaints = await db.query(sql); // Await the query
         const user = req.user;
-        res.render('complaints/allComplaints', { complaints, user: user.email }); // Pass 'cities' to EJS view
+        const filteredComplaints = complaints.filter(complaint => complaint); // Removes null/undefined values
+
+        res.render('complaints/allComplaints', { complaints:filteredComplaints}); // Pass 'cities' to EJS view
 
     } catch (error) {
         console.error('Error fetching complaints:', error);
@@ -102,7 +104,7 @@ const deleteComplaint = async (req, res) => {
         }
 
         const sql = "DELETE FROM complaints WHERE id = ?";
-        await query(sql, [complaintId]); // Using promisified query
+        await db.query(sql, [complaintId]); // Using promisified query
 
         res.redirect('/complaints')
     } catch (error) {

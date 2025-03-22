@@ -8,11 +8,11 @@ const getCitiesAndCatgeories = async (req, res) => {
         const categoriesQuery = "SELECT * FROM categories";
         const user = req.user;
         // Fetch data from the database
-        const [cities] = await db.promise().query(citiesQuery);
-        const [categories] = await db.promise().query(categoriesQuery);
+        const [cities] = await db.query(citiesQuery);
+        const [categories] = await db.query(categoriesQuery);
 
         // Render EJS template with data
-        res.render("products/addProduct", { cities, categories, user: user.email });
+        res.render("products/addProduct", { cities, categories});
     } catch (error) {
         console.error("Error fetching cities and categories:", error);
         res.status(500).send("Server Error");
@@ -34,7 +34,7 @@ const addProduct = async (req, res) => {
             VALUES (?, ?, ?, ?, ?)
         `;
 
-        await db.promise().query(insertQuery, [city, category, productEnglish, productUrdu, price]);
+        await db.query(insertQuery, [city, category, productEnglish, productUrdu, price]);
 
         res.redirect("/products"); // Redirect to the form after adding
     } catch (error) {
@@ -58,13 +58,13 @@ const getProducts = async (req, res) => {
         const citiesQuery = `SELECT * FROM cities`;
         const categoriesQuery = `SELECT * FROM categories`;
         const user = req.user;  
-        const [products] = await db.promise().query(productsQuery);
-        const [cities] = await db.promise().query(citiesQuery);
-        const [categories] = await db.promise().query(categoriesQuery);
+        const [products] = await db.query(productsQuery);
+        const [cities] = await db.query(citiesQuery);
+        const [categories] = await db.query(categoriesQuery);
 
 
 
-        res.render("products/products", { products, cities, categories, user: user.email }); // Pass products, cities, and categories
+        res.render("products/products", { products, cities, categories}); // Pass products, cities, and categories
     } catch (error) {
         console.error("Error fetching products:", error);
         res.status(500).send("Server Error");
@@ -94,7 +94,7 @@ const updatePrice = async (req, res) => {
         const oldProduct = product[0];
 
         // Insert old data into old product histroy table before updating
-        await db.promise().query(`
+        await db.query(`
             INSERT INTO oldproducthistory 
                 (product_id, productEnglish, productUrdu, old_price, cityEnglish, cityUrdu, categoryEnglish, categoryUrdu, updated_at) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW())
@@ -110,7 +110,7 @@ const updatePrice = async (req, res) => {
         ]);
 
         // Update the new price in the products table
-        await db.promise().query("UPDATE products SET price = ? WHERE id = ?", [price, id]);
+        await db.query("UPDATE products SET price = ? WHERE id = ?", [price, id]);
 
         res.json({ success: true, message: "Price updated successfully" });
     } catch (error) {
@@ -125,7 +125,7 @@ const deleteProduct = async (req, res) => {
     const { id } = req.params;
 
     try {
-        await db.promise().query("DELETE FROM products WHERE id = ?", [id]);
+        await db.query("DELETE FROM products WHERE id = ?", [id]);
         res.json({ success: true, message: "Product deleted successfully" });
     } catch (error) {
         console.error("Error deleting product:", error);
@@ -159,7 +159,7 @@ const getOldHistoryProducts = async (req, res) => {
         const [categories] = await db.query(categoriesQuery);
 
         // Render the oldProductHistory page with fetched data
-        res.render("products/oldProductHistory", { oldProducts, cities, categories, user: user.email });
+        res.render("products/oldProductHistory", { oldProducts, cities, categories});
 
     } catch (error) {
         console.error("Error fetching old product history:", error);

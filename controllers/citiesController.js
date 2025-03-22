@@ -6,7 +6,7 @@ const getCities = async (req, res) => {
         const sql = 'SELECT * FROM cities';
         const cities = await db.query(sql);
         const user = req.user;
-        res.render('cities', { cities, user: user.email }); // Pass 'cities' to EJS view
+        res.render('cities', { cities}); // Pass 'cities' to EJS view
     } catch (error) {
         console.error('Error fetching cities:', error);
         res.status(500).json({ error: 'Database error' });
@@ -17,7 +17,7 @@ const getCities = async (req, res) => {
 const addCity = async (req, res) => {
     try {
         const { cityEnglish, cityUrdu } = req.body;
-
+        console.log(req.body);
         if (!cityEnglish || !cityUrdu) {
             return res.status(400).json({ error: "Both city names (English & Urdu) are required" });
         }
@@ -103,7 +103,7 @@ const getCityById = async (req, res) => {
             }
 
             // Pass the city data to the EJS template for rendering
-            res.render('editCity', { city: result[0], user: user.email });
+            res.render('editCity', { city: result[0]});
         });
     } catch (error) {
         console.error('Error:', error);

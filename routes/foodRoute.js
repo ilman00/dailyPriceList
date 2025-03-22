@@ -14,7 +14,8 @@ router.get('/',isAuthenticated,(req, res) => {
 
 // Get Cities and Return JSON Response
 router.get('/add-city', isAuthenticated ,(req, res) => {
-    res.render('addCity');
+    const user = req.user;
+    res.render('addCity', {user: user.email});
 });
 router.get('/cities', getCities);
 // POST route to insert city into the database

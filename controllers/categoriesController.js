@@ -7,7 +7,7 @@ const getCategories = async (req, res) => {
         const sql = 'SELECT * FROM categories';
         const categories = await db.query(sql); // Await the query
         const user = req.user;
-        res.render('categories/categories', { categories, user:user.email }); // Pass 'cities' to EJS view
+        res.render('categories/categories', { categories}); // Pass 'cities' to EJS view
     } catch (error) {
         console.error('Error fetching categories:', error);
         res.status(500).json({ error: 'Database error' });

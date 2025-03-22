@@ -21,7 +21,7 @@ const getApproveUser = async (req, res) => {
         const [candidates] = await db.query("SELECT * FROM admin WHERE status = 'not approved'");
 
         const user = req.user;        
-        res.render("approveUser", { users: candidates, user: user.email });
+        res.render("approveUser", { users: candidates});
     } catch (error) {
         console.error("Error fetching unapproved users:", error);
         return res.status(500).send("Internal Server Error");
